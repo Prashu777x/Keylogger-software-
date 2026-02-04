@@ -74,3 +74,54 @@
         <div id="log-window">
             <div class="log-entry">Waiting for incoming events...</div>
         </div>
+
+        <div class="stats">
+            <div class="stat-card">Keys: <span id="count">0</span></div>
+            <div class="stat-card">Device: <span id="device">--</span></div>
+        </div>
+    </div>
+
+    <script>
+        // Placeholder for WebSocket logic
+        // In a real app, you'd use: const socket = io('http://localhost:3000');
+        
+        const logWindow = document.getElementById('log-window');
+        const countEl = document.getElementById('count');
+        let keyCount = 0;
+
+        // Function to simulate an event (Replace this with real socket listener)
+        function addLog(data) {
+            keyCount++;
+            countEl.innerText = keyCount;
+            document.getElementById('device').innerText = data.dev;
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="timestamp">[${new Date().toLocaleTimeString()}]</span> 
+                <span class="event-type">${data.type.toUpperCase()}</span>: 
+                <span class="key-id">${data.keyId}</span> (Code: ${data.keyCode})
+            `;
+            
+            logWindow.prepend(entry);
+        }
+
+        // Dummy simulation for demo purposes
+        setTimeout(() => {
+            document.getElementById('status').innerText = 'CONNECTED';
+            document.getElementById('status').style.color = '#00ff41';
+            
+            // Simulating a keypress every 2 seconds
+            setInterval(() => {
+                addLog({
+                    timeS: Math.floor(Date.now()/1000),
+                    keyCode: 17,
+                    keyId: 'KEY_W',
+                    type: 'keypress',
+                    dev: 'event0'
+                });
+            }, 2000);
+        }, 1000);
+    </script>
+</body>
+</html>
